@@ -2,7 +2,7 @@
 N = 10;M = 20;
 P = eye(N); % PowerMatrix
 
-SNR = linspace(-20,0,10);
+SNR = linspace(-100,20,100);
 SNRLinear = 10.^(SNR./10);
 
 Type={'LMMSE';'MMSE_VBLAST'};
