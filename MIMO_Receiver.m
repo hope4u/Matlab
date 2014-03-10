@@ -1,4 +1,4 @@
-function [Phi,SINR ] = MIMO_Receiver( H,P,sigma, Type )
+function [Phi,SINR,order] = MIMO_Receiver( H,P,sigma, Type )
 M = size(H,1);
 N = size(H,2);
 
@@ -24,6 +24,7 @@ switch Type
         G = Phi^(-1) *H'*K_n^(-1);
 
         SINR = zeros(N,1);
+        order = zeros(N,1);
         index = [1:N]';
         for i = 1:N
             currentPhi = (H_eq'*H_eq+eye(size(index,1)));
@@ -33,7 +34,9 @@ switch Type
             
             SINR_index = index(maxSINR_index);
             SINR(SINR_index) = maxSINR;
-           
+            
+            order(i)=SINR_index; % get decoding order
+            
             index(maxSINR_index)=[];
             H_eq(:,maxSINR_index)=[];
         end

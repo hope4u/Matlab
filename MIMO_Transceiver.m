@@ -10,20 +10,21 @@ sigma = trace(P)./(N.*SNRLinear);
 %% Decoder
 SINR = zeros(N,length(SNR),length(Type),length(Optimizer));
 Phi = zeros(N,N,length(SNR),length(Type),length(Optimizer));
-for j=1:length(SNR) %iterate over SNR
-    for i = 1:length(Type) %iterate over Type   
-        for k = 1:length(Optimizer) %iterate over Optimizer
-        
-            switch Optimizer{k}
-                case 'none'
-                    H_op = H;
-                    P_op = P;
-                case 'wf'
-                    [ H_op,P_op ] = waterFilling(H,P,sigma(j));
-            end
-            
-            [Phi(:,:,j,i,k),SINR(:,j,i,k)] = MIMO_Receiver(H_op,P_op,sigma(j),Type{i});
 
+for k = 1:length(Optimizer) %iterate over Optimizer
+    for j=1:length(SNR) %iterate over SNR   
+        switch Optimizer{k}
+            case 'none'
+                H_op = H;
+                P_op = P;
+            case 'wf'
+                [ H_op,P_op ] = waterFilling(H,P,sigma(j));
+            case 'ra_wf'
+                [ H_op,P_op ] = rateAdabpitve_interativeWaterFilling(H,P,sigma(j));
+        end
+    
+        for i = 1:length(Type) %iterate over Type               
+            [Phi(:,:,j,i,k),SINR(:,j,i,k)] = MIMO_Receiver(H_op,P_op,sigma(j),Type{i});
         end
     end
 end
