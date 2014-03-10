@@ -26,8 +26,8 @@ for j=1:10 % number of iterations till it converges
         H_eq = R_n^(-1/2)*H(:,i);
         
         [~,S,V]=svd(H_eq,0);
-        epsilon=v-S.^(-1);
-        P_op(i) = V*epsilon*V';
+        epsilon=v-1/S^2;
+        P_op(i,i) = V'*epsilon*V;
     end
 end
 
