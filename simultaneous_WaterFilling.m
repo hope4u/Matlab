@@ -1,4 +1,4 @@
-function [H_op, P_op] = rateAdabpitve_interativeWaterFilling(H,P,sigma)
+function [H_op, P_op] = simultaneous_WaterFilling(H,P,sigma)
 M = size(H,1);
 N = size(H,2);
 
@@ -22,11 +22,19 @@ for j=1:10 % number of iterations till it converges
         i=order(k);
         % Calculate the Channel with respect to inter-channel interference
         % and Noise
-        H_eq = sqrtm(K_n^(-1))*H*sqrtm(P_op);
+        H_eq = sqrtm(K_n^(-1))*H*sqrtm(P);
         
         Z = H_eq(:,[1:i-1 i+1:end])*H_eq(:,[1:i-1 i+1:end])' + eye(M);
-        H_eq(:,i)/Z;
+        [U,S,V] = svd(Z);
+        H_eq_i = sqrtm(S^(-1))*V'*H_eq(:,i);
+        [U,S,V] = svd(H_eq_i);
         
+        [ H_wf,P_wf,U,S,V ] = waterFilling(H_eq(:,i),P(i,i),Z);
+        
+        P_op(i,i) = V'*P(i,i)*V;
+    end
+    
+    
         
         H_tilde = H_eq(:,[1:i-1 i+1:end])*H_eq(:,[1:i-1 i+1:end])'
         
