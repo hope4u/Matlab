@@ -19,8 +19,6 @@ for k = 1:length(Optimizer) %iterate over Optimizer
                 P_op = P;
             case 'wf'
                 [ H_op,P_op ] = waterFilling(H,P,sigma(j));
-            case 'ra_wf'
-                [ H_op,P_op ] = rateAdabpitve_interativeWaterFilling(H,P,sigma(j));
         end
     
         for i = 1:length(Type) %iterate over Type               
