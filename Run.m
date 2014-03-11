@@ -2,16 +2,11 @@
 N = 10;M = 20;
 P = eye(N); % PowerMatrix
 
-SNR = linspace(-100,20,100);
+SNR = linspace(-35,5,40);
 SNRLinear = 10.^(SNR./10);
 
 Type={'LMMSE';'MMSE_VBLAST'};
-Optimizer={'none';'wf';'ra_wf'};
-
-% Optimizer=Optimizer{1};
-% Optimizer=Optimizer{2};
-Optimizer=Optimizer([1 3]);
-
+Optimizer={'none';'wf';'sp_iwf'};  %Optimizer={'none';'wf';'sp_iwf'};
 
 %% run
 [SINR, Phi] = MIMO_Transceiver(M,N,P,SNR,Type,Optimizer);
@@ -37,6 +32,7 @@ end
 figure(1);clf
 hold on
 plot(SNR(:),R_ac(:,1,1),'r');
-plot(SNR(:),R_ac(:,1,2),'b');
+plot(SNR(:),R_ac(:,1,2),'g');
+plot(SNR(:),R_ac(:,1,3),'b');
 
 hold off
