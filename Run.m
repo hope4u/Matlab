@@ -1,5 +1,5 @@
 %% channel settings
-N = 10;M = 20;
+N = 3;M = 5;
 P = eye(N); % PowerMatrix
 
 SNR = linspace(-35,5,40);
@@ -29,10 +29,9 @@ end
 %% plot
 
 % Achievable Rate
-figure(1);clf
+if exist('fRate','var'); figure(fRate); else fRate = figure; end; clf;
 hold on
 plot(SNR(:),R_ac(:,1,1),'r');
 plot(SNR(:),R_ac(:,1,2),'g');
 plot(SNR(:),R_ac(:,1,3),'b');
-
 hold off

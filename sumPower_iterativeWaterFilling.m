@@ -12,7 +12,7 @@ Q(:,[-(K-2)+n:n]) = trace(P)/(K*N);
 
 for n=n+1:n+10;
     for i=1:K
-        Z = eye(M)*sigma;
+        Z = eye(M);
         for j=1:K-1
             ind = mod(i+j-1,K)+1;
             Z = Z + H(:,ind)*Q(ind,n-K+j)*H(:,ind)';
@@ -29,6 +29,7 @@ for n=n+1:n+10;
 end
 P_op = diag(Q(:,n));
 trace(P_op)
+P_op
 H_op = H;
 
 end
