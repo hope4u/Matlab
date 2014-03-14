@@ -1,8 +1,8 @@
 %% channel settings
-N = 3;M = 5;
+N = 10;M = 30;
 P = eye(N); % PowerMatrix
 
-SNR = linspace(-35,5,40);
+SNR = linspace(-15,5,40);
 SNRLinear = 10.^(SNR./10);
 
 Type={'LMMSE';'MMSE_VBLAST'};
