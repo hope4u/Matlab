@@ -21,6 +21,17 @@ for k = 1:length(Optimizer) %iterate over Optimizer
                 [ H_op,P_op ] = waterFilling(H,P,sigma(j));
             case 'sp_iwf'
                 [ H_op,P_op ] = sumPower_iterativeWaterFilling( H,P,sigma(j) );
+            case 'sp_iwf_paper'
+                H_in = zeros(M,1,N);
+                for n=1:N
+                    H_in(:,:,n) = H(:,n);
+                end
+                [ ~,P_out ] = iterative_waterfill(H_in,trace(P),50);
+                P_op = P;
+                for n=1:N
+                    P_op(n,n)=P_out(:,:,n);
+                end
+                H_op = H;
         end
     
         for i = 1:length(Type) %iterate over Type               

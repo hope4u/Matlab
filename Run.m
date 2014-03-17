@@ -6,7 +6,7 @@ SNR = linspace(-15,5,40);
 SNRLinear = 10.^(SNR./10);
 
 Type={'LMMSE';'MMSE_VBLAST'};
-Optimizer={'none';'wf';'sp_iwf'};  %Optimizer={'none';'wf';'sp_iwf'};
+Optimizer={'none';'sp_iwf';'sp_iwf_paper'};  %Optimizer={'none';'wf';'sp_iwf';'sp_iwf_paper'};
 
 %% run
 [SINR, Phi] = MIMO_Transceiver(M,N,P,SNR,Type,Optimizer);
