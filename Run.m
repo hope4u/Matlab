@@ -6,7 +6,7 @@ SNR = linspace(-100,20,100);
 SNRLinear = 10.^(SNR./10);
 
 Type={'LMMSE';'MMSE_VBLAST'};
-Optimizer={'none';'wf';'ra_wf'};
+Optimizer={'none';'wf';'ra_wf';'grad'};
 
 % Optimizer=Optimizer{1};
 % Optimizer=Optimizer{2};
