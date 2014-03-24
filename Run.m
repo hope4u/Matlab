@@ -6,7 +6,16 @@ SNR = linspace(-15,5,40);
 SNRLinear = 10.^(SNR./10);
 
 Type={'LMMSE';'MMSE_VBLAST'};
+<<<<<<< HEAD
 Optimizer={'none';'sp_iwf';'sp_iwf_paper'};  %Optimizer={'none';'wf';'sp_iwf';'sp_iwf_paper'};
+=======
+Optimizer={'none';'wf';'ra_wf';'grad'};
+
+% Optimizer=Optimizer{1};
+% Optimizer=Optimizer{2};
+Optimizer=Optimizer([1 3]);
+
+>>>>>>> origin/gradient
 
 %% run
 [SINR, Phi] = MIMO_Transceiver(M,N,P,SNR,Type,Optimizer);
