@@ -19,7 +19,6 @@ for k = 1:length(Optimizer) %iterate over Optimizer
                 P_op = P;
             case 'wf'
                 [ H_op,P_op ] = waterFilling(H,P,sigma(j));
-<<<<<<< HEAD
             case 'sp_iwf'
                 [ H_op,P_op ] = sumPower_iterativeWaterFilling( H,P,sigma(j) );
             case 'sp_iwf_paper'
@@ -32,10 +31,9 @@ for k = 1:length(Optimizer) %iterate over Optimizer
                 for n=1:N
                     P_op(n,n)=P_out(:,:,n);
                 end
-=======
+                H_op = H;
             case 'grad'
                 P_op = gradient(H,P,sigma(j));
->>>>>>> origin/gradient
                 H_op = H;
         end
     
