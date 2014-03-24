@@ -1,12 +1,12 @@
 function [ P_op ] = gradient( H,P,sigma )
 [M,N] = size(H);
 
-H_eq = sigma^(-1)*H;
+H_eq = sigma^(-1/2)*H;
 
     for i=1:50
     Phi = P^(1/2)'*(H_eq'*H_eq)*P^(1/2)+eye(N);
 
-    constGrad = [ones(N,1)];% [zeros(N-1,1);1]];
+    constGrad = [ones(N,1) eye(N)];
 
     n = diag(H_eq'*H_eq);
     nx = diag((P^(1/2)'*(H_eq'*H_eq)*P^(1/2))^(-1));
