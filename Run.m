@@ -1,5 +1,5 @@
 %% channel settings
-N = 10;M = 30;
+N = 5;M = 5;
 P = eye(N); % PowerMatrix
 
 SNR = linspace(-15,5,40);
