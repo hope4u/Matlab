@@ -1,12 +1,14 @@
 %% channel settings
-N = 5;M = 5;
+clear;
+close all;
+N = 4;M = 4;
 P = eye(N); % PowerMatrix
 
 SNR = linspace(-15,5,40);
 SNRLinear = 10.^(SNR./10);
 
 Type={'LMMSE';'MMSE_VBLAST'};
-Optimizer={'none';'sp_iwf_paper';'grad'};  %Optimizer={'none';'wf';'grad';'sp_iwf';'sp_iwf_paper'};
+Optimizer={'wf';'grad'};  %Optimizer={'none';'wf';'grad';'sp_iwf';'sp_iwf_paper'};
 
 
 %% run
@@ -30,9 +32,10 @@ end
 %% plot
 
 % Achievable Rate
-if exist('fRate','var'); figure(fRate); else fRate = figure; end; clf;
+% if exist('fRate','var'); figure(fRate); else fRate = figure; end; clf;
+figure
 hold on
-plot(SNR(:),R_ac(:,1,1),'r');
-plot(SNR(:),R_ac(:,1,2),'g');
-plot(SNR(:),R_ac(:,1,3),'b');
+for k=1:length(Optimizer)
+    plot(SNR(:),R_ac(:,1,k),'color',[1-(k-1)/(length(Optimizer)-1) (k-1)/(length(Optimizer)-1) 0]);
+end
 hold off
