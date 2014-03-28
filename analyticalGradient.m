@@ -1,4 +1,7 @@
-function [ P_op ] = gradient( H,P,sigma )
+function [ P_op ] = analyticalGradient( H,P,sigma )
+%UNTITLED Summary of this function goes here
+%   Detailed explanation goes here
+
 
 pNorm = 1; % 1: maximize sumRate
 iterations = 100;
@@ -10,33 +13,12 @@ H_eq = sigma^(-1/2)*H;
 Phi = P^(1/2)'*(H_eq'*H_eq)*P^(1/2)+eye(N);
 Rate1 = real(log2(1./diag(Phi^(-1))))
 
+
 Gradient = zeros(N,iterations);
 GradNorm = zeros(1,iterations);
-sumRate = zeros(1,iterations);
+sumRate = zeros(1,literations);
 
-%% analytical gradient
-
-% for j = 1:1000
-%     X = sqrt(P); X = X*sqrt(maxP)/sqrt(trace(X^2));
-%     Phi = X'*(H_eq'*H_eq)*X+eye(N);
-%     
-%     Gradient = zeros(N,1);
-%     for i = 1:N
-%         J=zeros(N); J(i,i)=1;
-%         Gradient(i) = real(log(2)*sum(diag(1./Phi^(-1)).*diag(Phi^(-1)*(J'*H'*1/sigma*H*X+X*H'*1/sigma*H*J)*Phi^(-1))));
-%     end
-%     
-%     X = X + .1*diag(Gradient);
-%     X = X*sqrt(maxP)/sqrt(trace(X^2));
-%     P = X^2;    
-% 
-%     for i=1:N
-%         plot(j,P(i,i))
-%         hold on
-%     end
-% end
-
-%% numerical Gradient
+% analytical Gradient
 for j=1:iterations
     %iterate
     X = sqrt(P); X = X*sqrt(maxP)/sqrt(trace(X^2));
@@ -67,12 +49,17 @@ end
     
 P_op = P;
 
-% plot Gradient and sumRate
-% figure
-% plot(GradNorm)
-% plot(sumRate)
+if sigma == 1
+    plot Gradient and sumRate
+    figure
+    plot(GradNorm)
+    plot(sumRate)
+end
 
 Phi = P_op^(1/2)'*(H_eq'*H_eq)*P_op^(1/2)+eye(N);
 Rate2 = real(log2(1./diag(Phi^(-1))))
+
+
+
 end
 
