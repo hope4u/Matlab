@@ -29,15 +29,17 @@ for i=1:iterations
     normD = norm(Rate,pNorm)^(1-pNorm);
     for j=1:N
         E = zeros(N); E(j,j)=1;
+        
+        PhiD = maxP/trace(X^2)*(E*H_eq'*H_eq*X+X*H_eq'*H_eq*E)-...
+            maxP/(trace(X^2))^2*((X*H_eq'*H_eq*X+eye(N))*2*X*E);
+        PhiInvD = Phi^(-1)*PhiD*Phi^(-1);
+        
         Gradient(j,i) = normD*sum(...
-            Rate.^(pNorm-1)./log(2)./diag(Phi^(-1)).*(...
-            diag(Phi^(-1)).*diag(...
-                maxP/trace(X^2)*(E*H_eq'*H_eq*X+X*H_eq'*H_eq*E)-...
-                maxP/(trace(X^2))^2*(X*H_eq'*H_eq*X*2*X*E)...
-            ).*diag(Phi^(-1))));
+            Rate.^(pNorm-1)*(-1)./log(2)./diag(Phi^(-1)).*...
+            diag(PhiInvD));
     end
     
-    X = X+.1*diag(Gradient(:,i));
+    X = X-.1*diag(Gradient(:,i));
     X = X*sqrt(maxP)/sqrt(trace(X^2));
     P = X^2;    
     

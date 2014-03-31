@@ -24,7 +24,7 @@ for j=1:iterations
     sumRate(j) = norm(Rate,pNorm);
     
     %calculate Gradient
-    e = 10^(-6);
+    e = 10^(-4);
     sumRate_e = sumRate(j);
     
     for i=1:N
