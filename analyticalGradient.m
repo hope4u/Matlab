@@ -13,44 +13,42 @@ H_eq = sigma^(-1/2)*H;
 Phi = P^(1/2)'*(H_eq'*H_eq)*P^(1/2)+eye(N);
 Rate1 = real(log2(1./diag(Phi^(-1))))
 
-
+sumRate = zeros(1,iterations);
 Gradient = zeros(N,iterations);
 GradNorm = zeros(1,iterations);
-sumRate = zeros(1,literations);
 
-% analytical Gradient
-for j=1:iterations
-    %iterate
+
+% ableitung der Norm
+%iterate
+for i=1:iterations
     X = sqrt(P); X = X*sqrt(maxP)/sqrt(trace(X^2));
     Phi = X'*(H_eq'*H_eq)*X+eye(N);
     Rate = real(log2(1./diag(Phi^(-1))));
-    sumRate(j) = norm(Rate,pNorm);
-    
-    %calculate Gradient
-    e = 10^(-6);
-    sumRate_e = sumRate(j);
-    
-    for i=1:N
-        X_e = X; X_e(i,i) = X(i,i)+e;
-        X_e = X_e*sqrt(maxP)/sqrt(trace(X_e^2)); %normierung
+    sumRate(i) = norm(Rate,pNorm);
 
-        Phi_e = X_e'*(H_eq'*H_eq)*X_e+eye(N);
-        sumRate_e(i) = norm(real(log2(1./diag(Phi_e^(-1)))),pNorm);
-        
+    normD = norm(Rate,pNorm)^(1-pNorm);
+    for j=1:N
+        E = zeros(N); E(j,j)=1;
+        Gradient(j,i) = normD*sum(...
+            Rate.^(pNorm-1)./log(2)./diag(Phi^(-1)).*(...
+            diag(Phi^(-1)).*diag(...
+                maxP/trace(X^2)*(E*H_eq'*H_eq*X+X*H_eq'*H_eq*E)-...
+                maxP/(trace(X^2))^2*(X*H_eq'*H_eq*X*2*X*E)...
+            ).*diag(Phi^(-1))));
     end
-
-    Gradient(:,j) = (sumRate_e-sumRate(j))./e;
-    X = X+.1*diag(Gradient(:,j));
-    X = X*sqrt(maxP)/sqrt(trace(X^2));
-    P = X^2;
     
-    GradNorm(j) = norm(Gradient(:,j));
+    X = X+.1*diag(Gradient(:,i));
+    X = X*sqrt(maxP)/sqrt(trace(X^2));
+    P = X^2;    
+    
+    GradNorm(i) = norm(Gradient(:,i));
+
 end
     
 P_op = P;
 
 if sigma == 1
-    plot Gradient and sumRate
+    %plot Gradient and sumRate
     figure
     plot(GradNorm)
     plot(sumRate)

@@ -47,7 +47,7 @@ end
 P_op = P;
 
 if sigma == 1
-    plot Gradient and sumRate
+    %plot Gradient and sumRate
     figure
     plot(GradNorm)
     plot(sumRate)

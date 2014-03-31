@@ -4,11 +4,11 @@ close all;
 N = 4;M = 4;
 P = eye(N); % PowerMatrix
 
-SNR = linspace(-15,5,40);
+SNR = linspace(15,55,40); SNR=0;
 SNRLinear = 10.^(SNR./10);
 
 Type={'LMMSE';'MMSE_VBLAST'};
-Optimizer={'wf';'grad'};  %Optimizer={'none';'wf';'grad';'sp_iwf';'sp_iwf_paper'};
+Optimizer={'wf';'grad';'sp_iwf_paper'};  %Optimizer={'none';'wf';'grad';'sp_iwf';'sp_iwf_paper'};
 
 
 %% run
