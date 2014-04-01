@@ -3,7 +3,7 @@ clear;
 close all;
 seed_start=10;
 randn('state',seed_start);
-N = 4;M = 4;
+N = 12;M = 12;
 P = eye(N); % PowerMatrix
 
 SNR = linspace(15,55,40); SNR=0;    

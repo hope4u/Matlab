@@ -33,8 +33,8 @@ for k = 1:length(Optimizer) %iterate over Optimizer
                 end
                 H_op = H;
             case 'grad'
-                P_op = numericalGradient(H,P,sigma(j));
-                P_op2 = analyticalGradient(H,P,sigma(j));
+                [P_op, gradient] = numericalGradient(H,P,sigma(j));
+                [P_op2, gradient2] = analyticalGradient(H,P,sigma(j));
                 H_op = H;
         end
     
