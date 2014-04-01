@@ -9,7 +9,7 @@ H = 1/sqrt(2)*(randn(M,N)+1i*randn(M,N));
 % H = hadamard(N);
 
 %%
-fprintf(1,'useing diag:');
-H = diag([1:N])
+% fprintf(1,'useing diag:');
+% H = diag([1:N])
 end
 

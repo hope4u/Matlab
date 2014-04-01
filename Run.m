@@ -1,6 +1,8 @@
 %% channel settings
 clear;
 close all;
+seed_start=10;
+randn('state',seed_start);
 N = 4;M = 4;
 P = eye(N); % PowerMatrix
 

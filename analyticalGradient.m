@@ -35,11 +35,11 @@ for i=1:iterations
         PhiInvD = Phi^(-1)*PhiD*Phi^(-1);
         
         Gradient(j,i) = normD*sum(...
-            Rate.^(pNorm-1)*(-1)./log(2)./diag(Phi^(-1)).*...
+            Rate.^(pNorm-1)./log(2)./diag(Phi^(-1)).*...
             diag(PhiInvD));
     end
     
-    X = X-.1*diag(Gradient(:,i));
+    X = X+.1*diag(Gradient(:,i));
     X = X*sqrt(maxP)/sqrt(trace(X^2));
     P = X^2;    
     
@@ -53,6 +53,7 @@ if sigma == 1
     %plot Gradient and sumRate
     figure
     plot(GradNorm)
+    hold on
     plot(sumRate)
 end
 

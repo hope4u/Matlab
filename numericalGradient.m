@@ -50,6 +50,7 @@ if sigma == 1
     %plot Gradient and sumRate
     figure
     plot(GradNorm)
+    hold on
     plot(sumRate)
 end
 
