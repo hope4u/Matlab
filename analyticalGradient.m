@@ -36,7 +36,7 @@ for n=1:iterations
             
         Dtrace = trace(2*E*X);
         Dxhhx = X*H'*H*E + E*H'*H*X;
-        DPhi = 1/(trace(X^2))^2 * (Dxhhx*trace(X^2) - X*H'*H*X*Dtrace);
+        DPhi = maxP/(trace(X^2))^2 * (Dxhhx*trace(X^2) - X*H'*H*X*Dtrace);
 
         DinvPhi = -Phi^(-1) * DPhi * Phi^(-1);
             
@@ -48,7 +48,7 @@ for n=1:iterations
     
     end
     
-    X = X +.1*N*diag(gradient(:,n));
+    X = X +.1*diag(gradient(:,n));
     X = X*sqrt(maxP)/sqrt(trace(X^2));
 
     P = X^2;    

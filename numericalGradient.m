@@ -29,7 +29,7 @@ for j=1:iterations
     for i=1:N
         X_e = X; X_e(i,i) = X(i,i)+e;
         X_e = X_e*sqrt(maxP)/sqrt(trace(X_e^2)); %normierung
-
+        
         Phi_e = X_e'*(H_eq'*H_eq)*X_e+eye(N);
         sumRate_e(i) = norm(real(log2(1./diag(Phi_e^(-1)))),pNorm);
         
