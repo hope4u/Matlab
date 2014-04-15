@@ -34,7 +34,19 @@ for k = 1:length(Optimizer) %iterate over Optimizer
                 H_op = H;
             case 'grad'
                 [P_op, gradient] = numericalGradient(H,P,sigma(j));
-                [P_op2, gradient2] = analyticalGradient(H,P,sigma(j));
+                [P_op, gradient2] = analyticalGradient(H,P,sigma(j));
+                H_op = H;
+                
+            case 'fodor'
+                P_op = fodorloops(H,P,sigma(j));
+                H_op = H;
+                
+            case 'minmax'
+                P_op = minmaxSINR(H,P,sigma(j));
+                H_op = H;
+                
+            case 'minPower'
+                P_op = minPower_rateConst(H,P,sigma(j));
                 H_op = H;
         end
     

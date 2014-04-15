@@ -10,7 +10,7 @@ else
     K_n = eye(M)*sigma;
 end
 
-H_eq = sqrtm(K_n^(-1))*H*sqrtm(P);
+H_eq = sigma^(-1/2)*H*sqrtm(P);
 switch Type
     case 'LMMSE'
      

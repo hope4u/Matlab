@@ -3,18 +3,19 @@ clear;
 close all;
 seed_start=10;
 randn('state',seed_start);
-N = 4;M = 4;
+N = 12;M = 12;
 P = eye(N); % PowerMatrix
 
-SNR = linspace(15,55,40);
-SNR = 0;
+SNR = 20;   
 SNRLinear = 10.^(SNR./10);
+cdf=10000;
+
 
 Type={'LMMSE'};
 %Type:      receiver type
 %     'LMMSE'               Linear MMSE equalizer
 %     'MMSE_VBLAST'         MMSE with SIC (optimal receiver)
-Optimizer={'grad';'minPower'};
+Optimizer={'none'};
 %Optimizer: 
 %     'none'                no Power optimization
 %     'wf'                  waterfilling and SVD precoding
@@ -23,21 +24,22 @@ Optimizer={'grad';'minPower'};
 %     'sp_iwf_paper'        jindal's sumPower waterfilling
 %     'fodor'               fodor's aproach with fairness constraints
 
+R_ch = zeros(N,cdf,length(Type),length(Optimizer));
+R_sum = zeros(cdf,length(Type),length(Optimizer));
+R_ac = zeros(cdf,length(Type),length(Optimizer));
 
+for j=1:cdf
 %% run
 [SINR, Phi] = MIMO_Transceiver(M,N,P,SNR,Type,Optimizer);
 
 %% calculate Rate
-R_ch = zeros(N,length(SNR),length(Type),length(Optimizer));
-R_sum = zeros(length(SNR),length(Type),length(Optimizer));
-R_ac = zeros(length(SNR),length(Type),length(Optimizer));
 
-for j=1:length(SNR) %iterate over SNR
+
     for i = 1:length(Type) %iterate over Type   
         for k = 1:length(Optimizer) %iterate over Optimizer
-            R_ch(:,j,i,k) = real(log2(SINR(:,j,i,k)+1));
+            R_ch(:,j,i,k) = real(log2(SINR(:,1,i,k)+1));
             R_sum(j,i,k) = sum(R_ch(:,j,i,k));
-            R_ac(j,i,k) = real(log2(det(Phi(:,:,j,i,k))));
+            R_ac(j,i,k) = real(log2(det(Phi(:,:,1,i,k))));
         end
     end
 end
@@ -45,11 +47,10 @@ end
 %% plot
 
 % Achievable Rate
-% if exist('fRate','var'); figure(fRate); else fRate = figure; end; clf;
+ecdf(min(R_ch))
 figure
 hold on
 for k=1:length(Optimizer)
-    plot(SNR(:),R_sum(:,1,k),'color',[(length(Optimizer)-k)/(length(Optimizer)) k/(length(Optimizer)) 0]);
+    plot(SNR(:),R_sum(:,1,k),'color',[1-(k-1)/(length(Optimizer)-1) (k-1)/(length(Optimizer)-1) 0]);
 end
-legend(Optimizer);
 hold off
