@@ -2,7 +2,16 @@ function [ P_op, gradient ] = minmaxSINR( H,P,sigma )
 
 pNorm = 1; % 1: maximize sumRate
 iterations = 50000;
+seed_start=1000;
+randn('state',seed_start);
+rand('state',seed_start);
+Px=rand(1,4);
+Pi=Px.^2/(sum(Px.^2));
+Pi1=4/(sum(Pi))*Pi;
+P=diag(Pi1);
+%P=diag([0.25 0.5 0.4 4-1.15]);
 
+P=6*P;
 [M,N] = size(H);
 maxP = trace(P);
 H_eq = sigma^(-1/2)*H;
@@ -15,7 +24,7 @@ sumRate = zeros(1,iterations);
 
 X = sqrt(P);
 
-SINRtgt = 1./diag(Phi^(-1))-1;
+SINRtgt =3*ones(N,1) ;%1./diag(Phi^(-1))-1;
 % numerical Gradient
 for j=1:iterations
     %iterate
@@ -39,7 +48,7 @@ for j=1:iterations
 
     gradient(:,j) = (diffToTgt_e-diffToTgt(j))./e;
     
-    step = .00001;
+    step = .0001;
     X = X-step*diag(gradient(:,j));
 %     if trace(X)>sqrt(maxP)
 %         X = X*sqrt(maxP)/sqrt(trace(X^2));

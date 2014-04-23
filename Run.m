@@ -7,14 +7,14 @@ N = 4;M = 4;
 P = eye(N); % PowerMatrix
 
 SNR = linspace(15,55,40);
-SNR = 0;
+% SNR = 0;
 SNRLinear = 10.^(SNR./10);
 
 Type={'LMMSE'};
 %Type:      receiver type
 %     'LMMSE'               Linear MMSE equalizer
 %     'MMSE_VBLAST'         MMSE with SIC (optimal receiver)
-Optimizer={'grad';'minPower'};
+Optimizer={'fodorPrecoding'};
 %Optimizer: 
 %     'none'                no Power optimization
 %     'wf'                  waterfilling and SVD precoding
@@ -22,7 +22,7 @@ Optimizer={'grad';'minPower'};
 %     'sp_iwf'              sumPower constraint waterfilling
 %     'sp_iwf_paper'        jindal's sumPower waterfilling
 %     'fodor'               fodor's aproach with fairness constraints
-
+%     'fodorPrecoding'      fodor's Precoding Optimization
 
 %% run
 [SINR, Phi] = MIMO_Transceiver(M,N,P,SNR,Type,Optimizer);

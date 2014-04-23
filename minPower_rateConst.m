@@ -24,8 +24,9 @@ for j=1:iterations
 %     sumRate(j) = norm(Rate,pNorm);
     Phiinv = Phi^(-1);
     for k=1:N
-        sumRate(j) = sumRate(j) + norm(Rate,pNorm)/N - Rate(k);
+        sumRate(j) = sumRate(j) + (norm(Rate,pNorm)/N - Rate(k))^2;
     end
+    sumRate(j) = sumRate(j)^(1/N);
 %     diffToTgt(j) = norm(1./diag(Phi^(-1))-1-SINRtgt);
     
     %calculate Gradient
@@ -42,14 +43,16 @@ for j=1:iterations
         Rate_e = real(log2(1./diag(Phi_e^(-1))));
 %         sumRate_e(i) = norm(real(log2(1./diag(Phi_e^(-1)))),pNorm);
         for k=1:N
-            sumRate_e(i) = sumRate_e(i) + norm(Rate_e,pNorm)/N - Rate_e(k);
+            sumRate_e(i) = sumRate_e(i) + (norm(Rate_e,pNorm)/N - Rate_e(k))^2;
         end
+        
+        sumRate_e(i) = sumRate_e(i)^(1/N);
     end
 
     gradient(:,j) = (sumRate_e-sumRate(j))./e;
     
-    step = .01;
-    X = X+step*diag(gradient(:,j));
+    step = .001;
+    X = X-step*diag(gradient(:,j));
     if trace(X^2)>maxP
         X = X*sqrt(maxP)/sqrt(trace(X^2));
     end

@@ -41,6 +41,12 @@ for k = 1:length(Optimizer) %iterate over Optimizer
                 P_op = fodorloops(H,P,sigma(j));
                 H_op = H;
                 
+            case 'fodorPrecoding'
+%                 P_op = fodorPrecodingOptimization(H,P,sigma(j));
+                P_op = fodorPrecodingOptimization2(H,P,sigma(j));
+
+                H_op = H;
+                
             case 'minmax'
                 P_op = minmaxSINR(H,P,sigma(j));
                 H_op = H;
