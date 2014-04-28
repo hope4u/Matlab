@@ -42,9 +42,11 @@ for k = 1:length(Optimizer) %iterate over Optimizer
                 H_op = H;
                 
             case 'fodorPrecoding'
-%                 P_op = fodorPrecodingOptimization(H,P,sigma(j));
+                P_op = fodorPrecodingOptimization(H,P,sigma(j));
+                H_op = H;
+                
+            case 'fodorPrecoding2'
                 P_op = fodorPrecodingOptimization2(H,P,sigma(j));
-
                 H_op = H;
                 
             case 'minmax'
