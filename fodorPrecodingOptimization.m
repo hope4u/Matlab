@@ -5,13 +5,13 @@ function [ P_op ] = fodorPrecodingOptimization( H,P,sigma )
 t=0;
 epsilon(1) = 1;
 kappa=.1;
-Gamma(:,1) = ones(K,1)*2; %target SINR
+Gamma(:,1) = ones(K,1)*.1; %target SINR
 
 P_tot = trace(P)/N; P = P_tot;
 
 T = ones(N,K,1);
 
-for t=2:10000
+for t=2:1000
     for k = 1:K
 
         int = 0;
@@ -22,7 +22,7 @@ for t=2:10000
         end       
         
         c(:,k,t) = real(diag( ...
-            (H(:,:,k)'*(int+N*sigma*eye(M))^(-1)*H(:,:,k)+1/P(k,t-1)*eye(1))^(-1)));
+            (H(:,:,k)'*(int+N*sigma*eye(M))^(-1)*H(:,:,k)+1/P(k,t-1)*eye(N))^(-1)));
         
         T(:,k,t) = sqrt(N*c(:,k,t)./sum(c(:,k,t)));
         
@@ -30,7 +30,7 @@ for t=2:10000
         P(k,t) = sum(c(:,k,t))/N*(Gamma(k,t) + 1);
     end
     
-%     epsilon(t) = epsilon(t-1); %power Optimization
+    epsilon(t) = epsilon(t-1); %power Optimization
     epsilon(t) = max(0,epsilon(t-1)-kappa*(sum(P(:,t))-P_tot)); %throughput maximization
 end
 

@@ -1,4 +1,4 @@
-function [SINR,Phi] = MIMO_Transceiver(M,N,P,SNR,Type,Optimizer)
+function [SINR,Phi,P_ret] = MIMO_Transceiver(M,N,P,SNR,Type,Optimizer)
 
 SNRLinear = 10.^(SNR./10);
 sigma = trace(P)./(N.*SNRLinear);
@@ -10,6 +10,7 @@ sigma = trace(P)./(N.*SNRLinear);
 %% Decoder
 SINR = zeros(N,length(SNR),length(Type),length(Optimizer));
 Phi = zeros(N,N,length(SNR),length(Type),length(Optimizer));
+P_ret = zeros(N,N,length(SNR),length(Type),length(Optimizer));
 
 for k = 1:length(Optimizer) %iterate over Optimizer
     for j=1:length(SNR) %iterate over SNR   
@@ -32,9 +33,12 @@ for k = 1:length(Optimizer) %iterate over Optimizer
                     P_op(n,n)=P_out(:,:,n);
                 end
                 H_op = H;
-            case 'grad'
+            case 'numericalGrad'
                 [P_op, gradient] = numericalGradient(H,P,sigma(j));
-                [P_op, gradient2] = analyticalGradient(H,P,sigma(j));
+                H_op = H;
+                
+            case 'analyticalGrad'
+                [P_op, gradient] = analyticalGradient(H,P,sigma(j));
                 H_op = H;
                 
             case 'fodor'
@@ -50,16 +54,18 @@ for k = 1:length(Optimizer) %iterate over Optimizer
                 H_op = H;
                 
             case 'minmax'
-                P_op = minmaxSINR(H,P,sigma(j));
+                [P_op, gradient, diffToTgt] = minmaxSINR(H,P,sigma(j));
+                [P_op2, gradient2, diffToTgt2] = Copy_of_analyticalGradient( H,P,sigma(j) );
                 H_op = H;
                 
-            case 'minPower'
-                P_op = minPower_rateConst(H,P,sigma(j));
-                H_op = H;
+%             case 'minPower'
+%                 P_op = minPower_rateConst(H,P,sigma(j));
+%                 H_op = H;
         end
     
         for i = 1:length(Type) %iterate over Type               
             [Phi(:,:,j,i,k),SINR(:,j,i,k)] = MIMO_Receiver(H_op,P_op,sigma(j),Type{i});
+            P_ret(:,:,j,i,k) = P_op;
         end
     end
 end

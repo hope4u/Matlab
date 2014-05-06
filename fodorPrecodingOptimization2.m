@@ -13,7 +13,7 @@ H = H_new;[M,N,K] = size(H);
 t=0;
 epsilon(1) = 1;
 kappa=.1;
-Gamma(:,1) = ones(K,1)*2; %target SINR
+Gamma(:,1) = ones(K,1)*3; %target SINR
 
 P_tot = trace(P); P = diag(P);
 
@@ -30,7 +30,7 @@ for t=2:10000
         end       
         
         c(:,k,t) = real(diag( ...
-            (H(:,:,k)'*(int+N*sigma*eye(M))^(-1)*H(:,:,k)+1/P(k,t-1)*eye(1))^(-1)));
+            (H(:,:,k)'*(int+N*sigma*eye(M))^(-1)*H(:,:,k)+1/P(k,t-1)*eye(N))^(-1)));
         
         T(:,k,t) = sqrt(N*c(:,k,t)./sum(c(:,k,t)));
         
@@ -38,8 +38,8 @@ for t=2:10000
         P(k,t) = sum(c(:,k,t))/N*(Gamma(k,t) + 1);
     end
     
-%     epsilon(t) = epsilon(t-1); %power Optimization
-    epsilon(t) = max(0,epsilon(t-1)-kappa*(sum(P(:,t))-P_tot)); %throughput maximization
+    epsilon(t) = epsilon(t-1); %power Optimization
+%     epsilon(t) = max(0,epsilon(t-1)-kappa*(sum(P(:,t))-P_tot)); %throughput maximization
 end
 
 for k=1:K
