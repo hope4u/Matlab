@@ -47,21 +47,6 @@ parfor j=1:cdf
     end
 end
 
-%% plot
-
-% Achievable Rate
-
-figure
-hold all
-for k=1:length(Optimizer)
-    ecdf(R_sum(:,1,k));%,'color',[(length(Optimizer)-k)/length(Optimizer) k/length(Optimizer) 0]);
-end
-hleg = legend(Optimizer);
-set(hleg,'Interpreter','none')
-set(hleg,'Location','Best')
-hold off
-
-% name = sprintf('%i%s',cdf,strjoin(Optimizer,'\b'));
 save(filename)
 
 end
