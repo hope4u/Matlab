@@ -1,22 +1,21 @@
-function [] = cdfmult(filename)
+function [] = cdfmult(filename,number)
 %% channel settings
-clear;
 close all;
-seed_start=10;
-randn('state',seed_start);
+
+randn('state',number*10);
 N = 12;M = 12;
 P = eye(N); % PowerMatrix
 
 SNR = 1;   
 SNRLinear = 10.^(SNR./10);
-cdf=10;
+cdf=1;
 
 
 Type={'LMMSE'};
 %Type:      receiver type
 %     'LMMSE'               Linear MMSE equalizer
 %     'MMSE_VBLAST'         MMSE with SIC (optimal receiver)
-Optimizer={'fodorPrecoding','minmax'};
+Optimizer={'none','numericalGrad','sp_iwf_paper'};
 %Optimizer: 
 %     'none'                no Power optimization
 %     'wf'                  waterfilling and SVD precoding
@@ -64,3 +63,5 @@ hold off
 
 % name = sprintf('%i%s',cdf,strjoin(Optimizer,'\b'));
 save(filename)
+
+end
