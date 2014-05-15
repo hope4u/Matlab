@@ -6,7 +6,7 @@ randn('state',number*10);
 N = 12;M = 12;
 P = eye(N); % PowerMatrix
 
-SNR = 1;   
+SNR = 1;    
 SNRLinear = 10.^(SNR./10);
 cdf=1;
 

@@ -1,6 +1,6 @@
 function [ P_op, gradient ] = numericalGradient( H,P,sigma )
 
-pNorm = 1; % 1: maximize sumRate
+pNorm = -30; % 1: maximize sumRate
 iterations = 100;
 
 [M,N] = size(H);
