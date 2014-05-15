@@ -8,14 +8,14 @@ P = eye(N); % PowerMatrix
 
 SNR = 20;   
 SNRLinear = 10.^(SNR./10);
-cdf=10000;
+cdf=100;
 
 
 Type={'LMMSE'};
 %Type:      receiver type
 %     'LMMSE'               Linear MMSE equalizer
 %     'MMSE_VBLAST'         MMSE with SIC (optimal receiver)
-Optimizer={'none'};
+Optimizer={'fodorPrecoding','minmax'};
 %Optimizer: 
 %     'none'                no Power optimization
 %     'wf'                  waterfilling and SVD precoding
@@ -47,10 +47,13 @@ end
 %% plot
 
 % Achievable Rate
-ecdf(min(R_ch))
+
 figure
-hold on
+hold all
 for k=1:length(Optimizer)
-    plot(SNR(:),R_sum(:,1,k),'color',[1-(k-1)/(length(Optimizer)-1) (k-1)/(length(Optimizer)-1) 0]);
+    ecdf(R_sum(:,1,k));%,'color',[(length(Optimizer)-k)/length(Optimizer) k/length(Optimizer) 0]);
 end
+hleg = legend(Optimizer);
+set(hleg,'Interpreter','none')
+set(hleg,'Location','Best')
 hold off

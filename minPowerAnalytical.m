@@ -1,13 +1,13 @@
-function [ P_op,gradient, diffToTgt ] = Copy_of_analyticalGradient( H,P,sigma )
+function [ P_op,gradient, diffToTgt ] = minPowerAnalytical( H,P,sigma )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
 
-iterations = 5000000;
+iterations = 20000;
 
 [M,N] = size(H);
 H_eq = sigma^(-1/2)*H;
-tgtSINR = .1*ones(N,1);
+tgtSINR = 1*ones(N,1);
 
 Phi = P^(1/2)'*(H_eq'*H_eq)*P^(1/2)+eye(N);
 
@@ -46,8 +46,8 @@ for n=1:iterations
         gradient(j,n) = real(sum((1./diag(invPhi)-1-tgtSINR).^2)^(-1/2) * sum((1./diag(invPhi)-1-tgtSINR) .* -1./(diag(invPhi).^2) .* diag(DinvPhi)));
     end
     
-    step = .000001;
-    X = X-step*diag(gradient(:,j));
+    step = .0001;
+    X = X-step*diag(gradient(:,n));
 %     X = X*sqrt(maxP)/sqrt(trace(X^2));
 
     P = X^2;    

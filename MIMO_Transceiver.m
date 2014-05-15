@@ -12,8 +12,9 @@ SINR = zeros(N,length(SNR),length(Type),length(Optimizer));
 Phi = zeros(N,N,length(SNR),length(Type),length(Optimizer));
 P_ret = zeros(N,N,length(SNR),length(Type),length(Optimizer));
 
-for k = 1:length(Optimizer) %iterate over Optimizer
-    for j=1:length(SNR) %iterate over SNR   
+
+for j=1:length(SNR) %iterate over SNR   
+    for k = 1:length(Optimizer) %iterate over Optimizer
         switch Optimizer{k}
             case 'none'
                 H_op = H;
@@ -54,8 +55,9 @@ for k = 1:length(Optimizer) %iterate over Optimizer
                 H_op = H;
                 
             case 'minmax'
-                [P_op, gradient, diffToTgt] = minmaxSINR(H,P,sigma(j));
-                [P_op2, gradient2, diffToTgt2] = Copy_of_analyticalGradient( H,P,sigma(j) );
+%                 [P_op, gradient, diffToTgt] = minmaxSINR(H,P,sigma(j));
+                [P_op2, gradient2, diffToTgt2] = minPowerAnalytical( H,P,sigma(j) );
+%                 P_op3 = minPowerClosedForm( H,P,sigma );
                 H_op = H;
                 
 %             case 'minPower'

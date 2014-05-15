@@ -1,6 +1,6 @@
 function [ P_op, gradient, diffToTgt ] = minmaxSINR( H,P,sigma )
 
-iterations = 50000;
+iterations = 20000;
 
 
 [M,N] = size(H);
@@ -14,7 +14,7 @@ diffToTgt = zeros(1,iterations);
 
 X = sqrt(P);
 
-SINRtgt =.1*ones(N,1) ;%1./diag(Phi^(-1))-1;
+SINRtgt =1*ones(N,1) ;%1./diag(Phi^(-1))-1;
 % numerical Gradient
 for j=1:iterations
     %iterate
@@ -22,7 +22,7 @@ for j=1:iterations
     diffToTgt(j) = norm(1./diag(Phi^(-1))-1-SINRtgt);
     
     %calculate Gradient
-    e = 10^(-10);
+    e = 10^(-4);
     diffToTgt_e = zeros(N,1);
     
     for i=1:N
