@@ -1,3 +1,4 @@
+function [] = cdfmult(filename)
 %% channel settings
 clear;
 close all;
@@ -8,7 +9,7 @@ P = eye(N); % PowerMatrix
 
 SNR = 1;   
 SNRLinear = 10.^(SNR./10);
-cdf=1000;
+cdf=10;
 
 
 Type={'LMMSE'};
