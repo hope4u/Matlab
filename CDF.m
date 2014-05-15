@@ -57,3 +57,4 @@ hleg = legend(Optimizer);
 set(hleg,'Interpreter','none')
 set(hleg,'Location','Best')
 hold off
+savefig('1000minmax.fig')
