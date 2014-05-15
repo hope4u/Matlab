@@ -8,7 +8,7 @@ P = eye(N); % PowerMatrix
 
 SNR = 20;   
 SNRLinear = 10.^(SNR./10);
-cdf=100;
+cdf=1000;
 
 
 Type={'LMMSE'};
