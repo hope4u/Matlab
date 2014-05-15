@@ -6,7 +6,7 @@ randn('state',seed_start);
 N = 12;M = 12;
 P = eye(N); % PowerMatrix
 
-SNR = 20;   
+SNR = 1;   
 SNRLinear = 10.^(SNR./10);
 cdf=1000;
 
@@ -28,15 +28,18 @@ R_ch = zeros(N,cdf,length(Type),length(Optimizer));
 R_sum = zeros(cdf,length(Type),length(Optimizer));
 R_ac = zeros(cdf,length(Type),length(Optimizer));
 
-for j=1:cdf
+numType = length(Type);
+numOptimizer = length(Optimizer);
+
+parfor j=1:cdf
 %% run
 [SINR, Phi] = MIMO_Transceiver(M,N,P,SNR,Type,Optimizer);
 
 %% calculate Rate
 
 
-    for i = 1:length(Type) %iterate over Type   
-        for k = 1:length(Optimizer) %iterate over Optimizer
+    for i = 1:numType %iterate over Type   
+        for k = 1:numOptimizer %iterate over Optimizer
             R_ch(:,j,i,k) = real(log2(SINR(:,1,i,k)+1));
             R_sum(j,i,k) = sum(R_ch(:,j,i,k));
             R_ac(j,i,k) = real(log2(det(Phi(:,:,1,i,k))));
@@ -57,5 +60,7 @@ hleg = legend(Optimizer);
 set(hleg,'Interpreter','none')
 set(hleg,'Location','Best')
 hold off
-savefig('1000minmax.fig')
-save 1000minmax.mat
+
+% name = sprintf('%i%s',cdf,strjoin(Optimizer,'\b'));
+savefig('1000minmax2.fig')
+save('1000minmax2.mat')
