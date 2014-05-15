@@ -8,14 +8,14 @@ P = eye(N); % PowerMatrix
 
 SNR = 1;    
 SNRLinear = 10.^(SNR./10);
-cdf=1;
+cdf=10;
 
 
 Type={'LMMSE'};
 %Type:      receiver type
 %     'LMMSE'               Linear MMSE equalizer
 %     'MMSE_VBLAST'         MMSE with SIC (optimal receiver)
-Optimizer={'none','numericalGrad','sp_iwf_paper'};
+Optimizer={'numericalGrad'};
 %Optimizer: 
 %     'none'                no Power optimization
 %     'wf'                  waterfilling and SVD precoding
