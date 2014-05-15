@@ -58,3 +58,4 @@ set(hleg,'Interpreter','none')
 set(hleg,'Location','Best')
 hold off
 savefig('1000minmax.fig')
+save 1000minmax.mat
