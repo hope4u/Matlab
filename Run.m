@@ -14,7 +14,7 @@ Type={'LMMSE'};
 %Type:      receiver type
 %     'LMMSE'               Linear MMSE equalizer
 %     'MMSE_VBLAST'         MMSE with SIC (optimal receiver)
-Optimizer={'minmax'};
+Optimizer={'minmax','fodorPrecoding2'};
 %Optimizer: 
 %     'none'                no Power optimization
 %     'wf'                  waterfilling and SVD precoding

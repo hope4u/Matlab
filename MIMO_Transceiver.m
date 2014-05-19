@@ -55,8 +55,8 @@ for j=1:length(SNR) %iterate over SNR
                 H_op = H;
                 
             case 'minmax'
-%                 [P_op, gradient, diffToTgt] = minmaxSINR(H,P,sigma(j));
-                [P_op2, gradient2, diffToTgt2] = minPowerAnalytical( H,P,sigma(j) );
+                [P_op, gradient, diffToTgt] = minmaxSINR(H,P,sigma(j));
+%                 [P_op2, gradient2, diffToTgt2] = minPowerAnalytical( H,P,sigma(j) );
 %                 P_op3 = minPowerClosedForm( H,P,sigma );
                 H_op = H;
                 
