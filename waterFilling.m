@@ -10,7 +10,7 @@ for k=1:N
 end
 P_wf = v - sigma./(S'*S);
 P_wf(P_wf<0)=0;
-P_wf=V*P_wf*V';
-H_wf=H;
+% P_wf=V*(sqrtm(P_wf)'*sqrtm(P_wf))*V';
+H_wf=H*V;
 
 end

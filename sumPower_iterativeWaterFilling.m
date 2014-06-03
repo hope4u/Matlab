@@ -4,6 +4,8 @@ M = size(H,1);
 K = size(H,2);
 N=1; % umber of Antennas per User
 
+H = H*1/sqrt(sigma);
+
 %% Algorithm 1
 % n=K-1;
 % Q = zeros(K,n);

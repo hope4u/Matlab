@@ -1,0 +1,43 @@
+
+universe	= vanilla
+getenv		= True		# MATLAB needs local environment
+
+#initialdir	= /home/foo/src/matlab
+my_prefix	= MIMOProj
+
+#
+# Seek max floating point performance
+#
+Rank		= Kflops
+
+#
+# Mandelbrot Constants
+#
+my_procs	= 500
+
+
+
+#
+# The name of the image file we want MATLAB to write
+#
+my_file		= $(my_prefix).$(Process).mat
+
+#
+# For MATLAB and other SEPP packages, the executable must be a script wrapper.
+#
+executable	= mimoproj.sh
+arguments	= cdfmult('$(my_file)',$(Process))
+notification = never
+
+#
+# To redirect stdout and/or stderr to /dev/null, comment these out.
+#
+log		= $(my_prefix).log
+output		= $(my_prefix).$(Process).out
+error		= $(my_prefix).$(Process).err
+
+#
+# Lastly, tell condor how many jobs to queue up.
+#
+queue $(my_procs)
+
