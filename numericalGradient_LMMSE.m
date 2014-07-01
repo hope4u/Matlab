@@ -1,4 +1,4 @@
-function [ P_op, gradient ] = numericalGradient( H,P,sigma )
+function [ P_op, gradient ] = numericalGradient_LMMSE( H,P,sigma )
 
 pNorm = 1; % 1: maximize sumRate
 iterations = 5000;

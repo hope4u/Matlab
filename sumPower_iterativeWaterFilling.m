@@ -4,6 +4,8 @@ M = size(H,1);
 K = size(H,2);
 N=1; % umber of Antennas per User
 
+H = H*1/sqrt(sigma);
+
 %% Algorithm 1
 % n=K-1;
 % Q = zeros(K,n);
@@ -44,8 +46,20 @@ for n=n+1:n+50;
         [U(i),D(i),V(i)]=svd(G(:,i,n)'*G(:,i,n));
     end
 
-    u=(trace(P)+sum(D.^-1))/K;
-    A = u-D.^(-1);
+    Noise = sort(D.^-1);
+    loop=1;last=K;
+    while (loop)
+        u = Noise(last);    %water level
+        power = sum(max(u - Noise, 0));
+        if (power > trace(P))
+            last = last - 1;
+        else
+            loop = 0;
+        end
+    end
+    u=(trace(P)+sum(Noise(1:last)))/last;
+
+    A = max((u-D.^(-1)),0);
     S(:,n) = U.*A.*conj(U);
     
     Q(:,n) = 1/K * S(:,n)+(K-1)/K*Q(:,n-1);

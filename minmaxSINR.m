@@ -1,7 +1,7 @@
-function [ P_op, gradient ] = numericalGradient( H,P,sigma )
+function [ P_op, gradient ] = minmaxSINR( H,P,sigma )
 
-pNorm = 1; % 1: maximize sumRate
-iterations = 5000;
+pNorm = -100; % 1: maximize sumRate
+iterations = 100;
 
 [M,N] = size(H);
 maxP = trace(P);
@@ -37,9 +37,10 @@ for j=1:iterations
 
     gradient(:,j) = (sumRate_e-sumRate(j))./e;
 
+    %step_old = step(end); 
     step_old = step(1); step=step_old;
     sumRate_new=[]; fin = 0;
-    for a=1:20
+    for a=1:40
  
         X_new = X+step(a)*diag(gradient(:,j));
         X_new = X_new*sqrt(maxP)/sqrt(trace(X_new^2));
@@ -77,9 +78,9 @@ for j=1:iterations
     if GradNorm(j) < .001
         break
     end
-%     if j>1 && ~sum(gradient(:,j-1)-gradient(:,j))
-%         break
-%     end
+    if j>1 && ~sum(gradient(:,j-1)-gradient(:,j))
+        break
+    end
 end
 
 
