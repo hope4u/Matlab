@@ -1,18 +1,35 @@
-[a,b,c] = size(Error)
-%     for cc=1:c
-%         if sum(sum(Error))
-%             cc
-%         end
-%     end
-error = [];
-for cc=1:c    
-    if R_sum(1,1,6,cc)<8
-        error(end+1)=cc
-    elseif R_sum(2,1,6,cc)<20
-        error(end+1)=cc
-    elseif R_sum(3,1,6,cc)<40
-        error(end+1)=cc
-    elseif R_sum(4,1,6,cc)<60
-        error(end+1)=cc
-    end
+P_tot_new = P_tot;
+R_ac_new = R_ac;
+R_ch_new = R_ch;
+R_sum_new = R_sum;
+
+%%
+
+P_tot(:,6,:) = P_tot_new;
+R_ac(:,6,:) = R_ac_new;
+R_ch(:,:,6,:) = R_ch_new;
+R_sum(:,6,:) = R_sum_new;
+
+%% plots
+
+figure
+hold all
+[channels, iterations] = size(P_now);
+for ch = 1:channels
+    plot(P_now(ch,:),'-','LineWidth',3);
 end
+title(sprintf('convergence of Powers for the numerical Gradient at %idB SNR',1));
+xlabel('iteration');
+ylabel('power');
+
+figure
+hold all
+[channels, iterations] = size(P_now);
+% for ch = 1:channels
+%     plot(SINR_now(ch,:),'-','LineWidth',3);
+% end
+% SINRtgt = SINRtgt(1)*ones(1,iterations);
+plot(sum_Rate,'-','LineWidth',3);%,'Color',[0 0 0]);
+title(sprintf('convergence of the sum-rate for the numerical Gradient at %idB SNR',1));
+xlabel('iteration');
+ylabel('sum-rate');

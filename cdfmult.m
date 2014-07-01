@@ -2,20 +2,20 @@ function [] = cdfmult(filename,number)
 %% channel settings
 close all;
 randn('state',number*10);
-N = 12;M = 12;
+N = 4;M = 4;
 P = eye(N); % PowerMatrix
 
-SNR = [-10,0,10,20];    
+SNR = [-10];    
 SNRLinear = 10.^(SNR./10);
-cdf=200;
+cdf=1;
 
 
 Type={'LMMSE'};
 %Type:      receiver type
 %     'LMMSE'               Linear MMSE equalizer
 %     'MMSE_VBLAST'         MMSE with SIC (optimal receiver)
-Optimizer={'numericalGrad','none'};
-% Optimizer={'none','wf','sp_iwf','sp_iwf_paper','numericalGrad_VBlast'};%'numericalGrad','minmax'};
+Optimizer={'powermin'};
+% Optimizer={'none','wf','sp_iwf','sp_iwf_paper','numericalGrad_VBlast'};%'numericalGrad_LMMSE','minmax'};
 
 %Optimizer: 
 %     'none'                no Power optimization

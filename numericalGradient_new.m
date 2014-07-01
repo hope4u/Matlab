@@ -1,7 +1,7 @@
-function [ P_op, gradient ] = numericalGradient_VBLAST( H,P,sigma )
+function [ P_op, gradient ] = numericalGradient( H,P,sigma )
 
 pNorm = 1; % 1: maximize sumRate
-iterations = 100;
+iterations = 5000;
 
 [M,N] = size(H);
 maxP = trace(P);
@@ -18,9 +18,8 @@ X = sqrt(P);
 step = .1;
 for j=1:iterations
     %iterate
-    %Calculate V_Blast Phi
-    [Phi, SINR] = MIMO_Receiver( H,X^2,sigma, 'MMSE_VBLAST' );
-    Rate = real(log2(SINR+1));
+    Phi = X'*(H_eq'*H_eq)*X+eye(N);
+    Rate = real(log2(1./diag(Phi^(-1))));
     sumRate(j) = norm(Rate,pNorm);
     
     %calculate Gradient
@@ -31,8 +30,8 @@ for j=1:iterations
         X_e = X; X_e(i,i) = X(i,i)+e;
         X_e = X_e*sqrt(maxP)/sqrt(trace(X_e^2)); %normierung
         
-        [Phi_e, SINR_e] = MIMO_Receiver( H,X_e^2,sigma, 'MMSE_VBLAST' );
-        sumRate_e(i) = norm(real(log2(SINR_e+1)),pNorm);
+        Phi_e = X_e'*(H_eq'*H_eq)*X_e+eye(N);
+        sumRate_e(i) = norm(real(log2(1./diag(Phi_e^(-1)))),pNorm);
         
     end
 
@@ -50,8 +49,8 @@ for j=1:iterations
             break
         end
         % adaptive StepSize
-        [Phi, SINR] = MIMO_Receiver( H,X_new^2,sigma, 'MMSE_VBLAST' );
-        Rate = real(log2(SINR+1));
+        Phi = X_new'*(H_eq'*H_eq)*X_new+eye(N);
+        Rate = real(log2(1./diag(Phi^(-1))));
         sumRate_new(a) = norm(Rate,pNorm);
 
         if sumRate_new(a)>sumRate(j)
@@ -74,18 +73,13 @@ for j=1:iterations
         end
     end
     P = X^2;
-    P_now(:,j+1) = diag(P);
-    [Phi_now, SINR] = MIMO_Receiver( H,P,sigma, 'MMSE_VBLAST' );
-
-    sum_Rate(j+1)=real(log2(det(Phi_now)));
-
     GradNorm(j) = norm(gradient(:,j));
     if GradNorm(j) < .001
         break
     end
-    if j>1 && ~sum(gradient(:,j-1)-gradient(:,j))
-        break
-    end
+%     if j>1 && ~sum(gradient(:,j-1)-gradient(:,j))
+%         break
+%     end
 end
 
 

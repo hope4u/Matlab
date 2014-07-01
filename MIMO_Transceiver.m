@@ -1,5 +1,6 @@
 function [SINR,Phi,P_ret,H] = MIMO_Transceiver(M,N,P,SNR,Type,Optimizer)
 
+TgtRate = [1,2,10]; 
 SNRLinear = 10.^(SNR./10);
 sigma = trace(P)./(N.*SNRLinear);
 
@@ -8,12 +9,13 @@ sigma = trace(P)./(N.*SNRLinear);
 
 
 %% Decoder
-SINR = zeros(N,length(SNR),length(Type),length(Optimizer));
-Phi = zeros(N,N,length(SNR),length(Type),length(Optimizer));
-P_ret = zeros(N,N,length(SNR),length(Type),length(Optimizer));
+SINR = zeros(N,length(SNR),length(Optimizer));
+Phi = zeros(N,N,length(SNR),length(Optimizer));
+P_ret = zeros(N,N,length(SNR),length(Optimizer));
 
 
-for j=1:length(SNR) %iterate over SNR   
+for j=1:length(SNR) %iterate over SNR
+    powerminDone = 0; fodorDone=0;
     for k = 1:length(Optimizer) %iterate over Optimizer
         switch Optimizer{k}
             case 'none'
@@ -36,7 +38,7 @@ for j=1:length(SNR) %iterate over SNR
                 end
                 H_op = H;
             case 'numericalGrad'
-                [P_op, gradient] = numericalGradient(H,P,sigma(j));
+                [P_op, gradient] = numericalGradient_LMMSE(H,P,sigma(j));
                 H_op = H;
             
             case 'numericalGrad_VBlast'
@@ -56,23 +58,25 @@ for j=1:length(SNR) %iterate over SNR
 %                 H_op = H;
                 
             case 'fodorPrecoding'
-                P_op = fodorPrecodingOptimization2(H,P,sigma(j));
+                fodorDone = fodorDone+1;   
+                P_op = fodorPrecodingOptimization2(H,P,sigma(j),TgtRate(fodorDone));
                 H_op = H;
-                
+                                
             case 'minmax'
                 [P_op, gradient] = minmaxSINR(H,P,sigma(j));
 %                [P_op2, gradient2, diffToTgt2] = minPowerAnalytical( H,P,sigma(j) );
 %                 P_op3 = minPowerClosedForm( H,P,sigma );
                 H_op = H;
-
+              
             case 'minmax_VBlast'
                 [P_op, gradient] = minmaxSINR_VBLAST(H,P,sigma(j));
                 H_op = H;
                 
             case 'powermin'
-                [P_op, gradient, diffToTgt] = powermin(H,P,sigma(j));
+                powerminDone = powerminDone+1; 
+                [P_op, gradient, diffToTgt] = powermin(H,P,sigma(j),TgtRate(powerminDone));
 %                 P_op = minPower_rateConst(H,P,sigma(j));
-                H_op = H;
+                H_op = H; 
         end
     
         for i = 1:length(Type) %iterate over Type               

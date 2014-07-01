@@ -1,4 +1,4 @@
-function [ P_op, gradient, diffToTgt ] = powermin( H,P,sigma )
+function [ P_op, gradient, diffToTgt ] = powermin( H,P,sigma,TgtRate )
 
 iterations = 200;
 
@@ -12,9 +12,10 @@ gradient = zeros(N,iterations);
 GradNorm = zeros(1,iterations);
 diffToTgt = zeros(1,iterations);
 
+P_now(:,1) = diag(P);
 X = sqrt(P);
 
-SINRtgt =ones(N,1) ;%1./diag(Phi^(-1))-1;
+SINRtgt =ones(N,1)*(2^TgtRate-1);%1./diag(Phi^(-1))-1;
 step=.1;
 % numerical Gradient
 for j=1:iterations
@@ -77,8 +78,11 @@ for j=1:iterations
     end
 
     P = X^2;
-    P_now(:,j) = diag(P);    
+    P_now(:,j+1) = diag(P);    
     GradNorm(j) = norm(gradient(:,j));
+    Phi_now = X'*(H_eq'*H_eq)*X+eye(N);
+    SINR_now(:,j+1) = real(1./diag(Phi_now^(-1))-1);
+    
     if diffToTgt(j)<.001
         break
     end
