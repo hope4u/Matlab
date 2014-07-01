@@ -28,7 +28,10 @@ function [capacity, Covariances] = iterative_waterfill(H, P, iterations);
 
 %Initialize covariances to zero
 Covariances = zeros(N,N,K); 
-
+for k=1:K
+    Covariances(:,:,k)=eye(N)*P/(K*N);
+end
+cov(:,:,:,1) = Covariances;
 for wf_iterations = 1:iterations
 
     sum_int = eye(M);
@@ -58,6 +61,7 @@ for wf_iterations = 1:iterations
             Covariances(:,:,k) = ((K-1)/K)*Covariances(:,:,k) + (1/K) * Ex(:,:,k);
         end;
     end;
+    cov(:,:,:,wf_iterations+1) = Covariances;
 end; 
 
 %Compute final sum rate
@@ -66,6 +70,19 @@ for k = 1:K
     sum_int = sum_int + H(:,:,k) * Covariances(:,:,k) * H(:,:,k)';
 end;
 capacity = real(log2(det(sum_int)));
+
+P_now=squeeze(cov);
+[chan,iter] = size(P_now);
+for it = 1:iter
+    Phi = eye(M);
+    for ch=1:chan
+        Phi = Phi + H(:,:,ch) * cov(:,:,ch,it) * H(:,:,ch)';
+    end
+    sum_Rate(it)=real(log2(det(Phi)));
+end
+
+it
+    
 
 
 

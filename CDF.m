@@ -3,19 +3,19 @@ clear;
 close all;
 seed_start=10;
 randn('state',seed_start);
-N = 12;M = 12;
+N = 4;M = 4;
 P = eye(N); % PowerMatrix
 
 SNR = 1;   
 SNRLinear = 10.^(SNR./10);
-cdf=1000;
+cdf=1;
 
 
-Type={'LMMSE'};
+Type={'MMSE_VBLAST'};
 %Type:      receiver type
 %     'LMMSE'               Linear MMSE equalizer
 %     'MMSE_VBLAST'         MMSE with SIC (optimal receiver)
-Optimizer={'fodorPrecoding','minmax'};
+Optimizer={'sp_iwf_paper','numericalGrad_VBlast'};
 %Optimizer: 
 %     'none'                no Power optimization
 %     'wf'                  waterfilling and SVD precoding
@@ -31,7 +31,7 @@ R_ac = zeros(cdf,length(Type),length(Optimizer));
 numType = length(Type);
 numOptimizer = length(Optimizer);
 
-parfor j=1:cdf
+for j=1:cdf
 %% run
 [SINR, Phi] = MIMO_Transceiver(M,N,P,SNR,Type,Optimizer);
 

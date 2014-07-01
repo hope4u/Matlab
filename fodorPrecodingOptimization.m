@@ -5,7 +5,7 @@ function [ P_op ] = fodorPrecodingOptimization( H,P,sigma )
 t=0;
 epsilon(1) = 1;
 kappa=.1;
-Gamma(:,1) = ones(K,1); %target SINR
+Gamma(:,1) = ones(K,1)*1; %target SINR
 
 P_tot = trace(P)/N; P = P_tot;
 
@@ -32,6 +32,10 @@ for t=2:1000
     
     epsilon(t) = epsilon(t-1); %power Optimization
 %     epsilon(t) = max(0,epsilon(t-1)-kappa*(sum(P(:,t))-P_tot)); %throughput maximization
+    if abs(P(k,t-1)-P(k,t))<.001
+        break;
+    end
+
 end
 
 for k=1:K
