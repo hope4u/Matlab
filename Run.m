@@ -1,20 +1,32 @@
 %% channel settings
-N = 10;M = 20;
+clear;
+close all;
+seed_start=10;
+randn('state',seed_start);
+N = 4;M = 4;
 P = eye(N); % PowerMatrix
 
-SNR = linspace(-20,0,10);
+SNR = linspace(15,55,40);
+SNR = 0;
 SNRLinear = 10.^(SNR./10);
 
-Type={'LMMSE';'MMSE_VBLAST'};
-Optimizer={'none';'wf';'ra_wf'};
-
-% Optimizer=Optimizer{1};
-% Optimizer=Optimizer{2};
-Optimizer=Optimizer([1 3]);
-
+Type={'LMMSE'};
+%Type:      receiver type
+%     'LMMSE'               Linear MMSE equalizer
+%     'MMSE_VBLAST'         MMSE with SIC (optimal receiver)
+Optimizer={'minmax','fodorPrecoding2'};
+%Optimizer: 
+%     'none'                no Power optimization
+%     'wf'                  waterfilling and SVD precoding
+%     'numericalGrad'       gradient Search for sumPower constraint
+%     'analyticalGrad'      gradient Search for sumPower constraint
+%     'sp_iwf'              sumPower constraint waterfilling
+%     'sp_iwf_paper'        jindal's sumPower waterfilling
+%     'fodor'               fodor's aproach with fairness constraints
+%     'fodorPrecoding'      fodor's Precoding Optimization
 
 %% run
-[SINR, Phi] = MIMO_Transceiver(M,N,P,SNR,Type,Optimizer);
+[SINR, Phi, P] = MIMO_Transceiver(M,N,P,SNR,Type,Optimizer);
 
 %% calculate Rate
 R_ch = zeros(N,length(SNR),length(Type),length(Optimizer));
@@ -34,9 +46,11 @@ end
 %% plot
 
 % Achievable Rate
-figure(1);clf
+% if exist('fRate','var'); figure(fRate); else fRate = figure; end; clf;
+figure
 hold on
-plot(SNR(:),R_ac(:,1,1),'r');
-plot(SNR(:),R_ac(:,1,2),'b');
-
+for k=1:length(Optimizer)
+    plot(SNR(:),R_sum(:,1,k),'color',[(length(Optimizer)-k)/(length(Optimizer)) k/(length(Optimizer)) 0]);
+end
+legend(Optimizer);
 hold off

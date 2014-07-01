@@ -10,18 +10,18 @@ else
     K_n = eye(M)*sigma;
 end
 
-H_eq = sqrtm(K_n^(-1))*H*sqrtm(P);
+H_eq = sigma^(-1/2)*H*sqrtm(P);
 switch Type
     case 'LMMSE'
      
         Phi = (H_eq'*H_eq+eye(N));
-        G = Phi^(-1) *H'*K_n^(-1);
+%         G = Phi^(-1) *H'*K_n^(-1);
         SINR = 1./diag(Phi^(-1)) - 1;
         
     case 'MMSE_VBLAST'
         
         Phi = (H_eq'*H_eq+eye(N));
-        G = Phi^(-1) *H'*K_n^(-1);
+%         G = Phi^(-1) *H'*K_n^(-1);
 
         SINR = zeros(N,1);
         order = zeros(N,1);
